@@ -56,19 +56,30 @@ def run_white_noise_tests_for_garch_residuals(
         )
 
     if not results:
-        print("Не удалось выполнить тесты Бокса–Пирса и Бокса–Льюнга: нет остатков GARCH.")
+        print(
+            "Не удалось выполнить тесты Бокса–Пирса и Бокса–Льюнга: нет остатков GARCH."
+        )
         return
 
     wn_df = pd.DataFrame(results)
-    wn_csv_path = run_dir / "white_noise_tests_garch_residuals.csv"
+    wn_csv_path = (
+        run_dir
+        / "результаты_тестов_Бокса-Пирса_и_Бокса-Льюнга_для_белого_шума_GARCH_остатков.csv"
+    )
     wn_df.to_csv(wn_csv_path, encoding="utf-8-sig", index=False)
 
-    print("\nТесты Бокса–Пирса и Бокса–Льюнга для СТАНДАРТИЗИРОВАННЫХ остатков GARCH(1,1):")
+    print(
+        "\nТесты Бокса–Пирса и Бокса–Льюнга для СТАНДАРТИЗИРОВАННЫХ остатков GARCH(1,1):"
+    )
     print(wn_df[["Тикер", "Лаг", "Box-Pierce p-значение", "Box-Ljung p-значение"]])
-    print(f"\nПолные результаты тестов белошумности сохранены в файле: {wn_csv_path.name}")
+    print(
+        f"\nПолные результаты тестов белошумности сохранены в файле: {wn_csv_path.name}"
+    )
 
 
-def plot_white_noise_diagnostics(std_resid_dict: dict[str, pd.Series], run_dir: Path, max_lag: int = 20) -> None:
+def plot_white_noise_diagnostics(
+    std_resid_dict: dict[str, pd.Series], run_dir: Path, max_lag: int = 20
+) -> None:
     """
     Строит графики для визуальной проверки белошумности стандартизированных остатков GARCH.
 
@@ -81,7 +92,7 @@ def plot_white_noise_diagnostics(std_resid_dict: dict[str, pd.Series], run_dir: 
         if series.empty:
             continue
 
-        # График временного хода стандартизированных остатков
+        # График временного хода стандартизированных остатков (кандидатов на белый шум)
         plt.figure(figsize=(10, 3))
         plt.plot(series.index, series.values, linewidth=0.8)
         plt.axhline(0, color="black", linewidth=1)
@@ -90,7 +101,10 @@ def plot_white_noise_diagnostics(std_resid_dict: dict[str, pd.Series], run_dir: 
         plt.xlabel("Дата")
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
-        resid_path = run_dir / f"std_resid_garch_{ticker}.png"
+        # График стандартизированных остатков GARCH для конкретного тикера (белый шум)
+        resid_path = (
+            run_dir / f"стандартизированные_остатки_белого_шума_GARCH_{ticker}.png"
+        )
         plt.savefig(resid_path)
         plt.close()
 
@@ -99,7 +113,7 @@ def plot_white_noise_diagnostics(std_resid_dict: dict[str, pd.Series], run_dir: 
         plot_acf(series, lags=max_lag, alpha=0.05)
         plt.title(f"ACF стандартизированных остатков GARCH(1,1): {ticker}")
         plt.tight_layout()
-        acf_path = run_dir / f"acf_std_resid_garch_{ticker}.png"
+        # График ACF стандартизированных остатков (белого шума)
+        acf_path = run_dir / f"ACF_белого_шума_GARCH_{ticker}.png"
         plt.savefig(acf_path)
         plt.close()
-

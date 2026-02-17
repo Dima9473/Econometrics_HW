@@ -38,4 +38,3 @@ def load_prices() -> pd.DataFrame:
     # Фильтр по заданию: с 01.09.2014 по настоящий момент
     df = df[df.index >= START_DATE].sort_index()
     return df
-

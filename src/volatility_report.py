@@ -36,10 +36,10 @@ def save_and_print_ranking(vol_df: pd.DataFrame, run_dir: Path) -> None:
     print("Ранжировка по средней волатильности (GARCH):")
     print(vol_df)
 
-    csv_path = run_dir / "volatility_ranking.csv"
+    csv_path = run_dir / "ранжирование_по_волатильности_GARCH.csv"
     vol_df.to_csv(csv_path, encoding="utf-8-sig")
-    print(f"\nРезультаты сохранены: {run_dir}")
-    print("  — графики: volatility_<тикер>.png")
+    print(f"\nРезультаты сохранены в папке: {run_dir}")
+    print("  — графики: волатильность_GARCH_<тикер>.png")
     print(f"  — ранжировка: {csv_path.name}")
 
 
@@ -47,7 +47,7 @@ def write_domain_report(vol_df: pd.DataFrame, run_dir: Path) -> None:
     """
     Формирует текстовый отчёт с комментариями с точки зрения предметной области.
     """
-    report_path = run_dir / "volatility_report.txt"
+    report_path = run_dir / "отчет_по_волатильности_GARCH.txt"
     high = vol_df[vol_df["Категория"] == "Высокая"].index.tolist()
     mid = vol_df[vol_df["Категория"] == "Средняя"].index.tolist()
     low = vol_df[vol_df["Категория"] == "Низкая"].index.tolist()
@@ -58,13 +58,15 @@ def write_domain_report(vol_df: pd.DataFrame, run_dir: Path) -> None:
         f.write(f"Период анализа: с {START_DATE} по текущую дату.\n")
         f.write("Модель: GARCH(1,1) по лог-доходностям цен акций.\n\n")
         f.write("Наиболее волатильные банки: " + ", ".join(high) + ".\n")
-        f.write("Более высокая волатильность может быть связана с меньшей ликвидностью,\n")
+        f.write(
+            "Более высокая волатильность может быть связана с меньшей ликвидностью,\n"
+        )
         f.write("размером капитализации, долей розничных инвесторов или спецификой\n")
         f.write("новостного фона (санкции, регуляторные решения).\n\n")
         f.write("Средняя волатильность: " + ", ".join(mid) + ".\n")
         f.write("Наименее волатильные: " + ", ".join(low) + ".\n")
         f.write("Низкая волатильность типична для крупных ликвидных эмитентов\n")
         f.write("и может отражать более стабильные ожидания участников рынка.\n\n")
-        f.write("Итоговая ранжировка и числовые значения — в файле volatility_ranking.csv.\n")
+        f.write("Итоговая ранжировка и числовые значения — в файле ")
+        f.write("«ранжирование_по_волатильности_GARCH.csv».\n")
     print(f"  — комментарий: {report_path.name}")
-

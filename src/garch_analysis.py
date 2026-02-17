@@ -61,14 +61,16 @@ def fit_garch_and_collect_stats(
         plt.ylabel("Волатильность (%)")
         plt.grid(True)
         plt.tight_layout()
-        out_path = run_dir / f"volatility_{ticker}.png"
+        out_path = run_dir / f"волатильность_GARCH_{ticker}.png"
         plt.savefig(out_path)
         plt.close()
 
     return volatility_results, cond_vol_series, std_resid_series
 
 
-def plot_volatility_comparison(cond_vol_series: Dict[str, pd.Series], run_dir: Path) -> None:
+def plot_volatility_comparison(
+    cond_vol_series: Dict[str, pd.Series], run_dir: Path
+) -> None:
     """
     Строит общий график для сравнения условной волатильности по всем банкам.
     """
@@ -82,7 +84,6 @@ def plot_volatility_comparison(cond_vol_series: Dict[str, pd.Series], run_dir: P
     plt.legend(loc="best", fontsize=9)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    plt.savefig(run_dir / "volatility_comparison.png")
+    plt.savefig(run_dir / "сравнение_волатильности_GARCH.png")
     plt.close()
-    print("  — сопоставление: volatility_comparison.png")
-
+    print("  — сопоставление: сравнение_волатильности_GARCH.png")

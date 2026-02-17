@@ -10,7 +10,9 @@ import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 
 
-def run_adf_for_price_series(df: pd.DataFrame, run_dir: Path, alpha: float = 0.05) -> None:
+def run_adf_for_price_series(
+    df: pd.DataFrame, run_dir: Path, alpha: float = 0.05
+) -> None:
     """
     Выполняет расширенный тест Дики–Фуллера (ADF) для КАЖДОГО ценового ряда.
 
@@ -40,7 +42,11 @@ def run_adf_for_price_series(df: pd.DataFrame, run_dir: Path, alpha: float = 0.0
         stat, p_value, used_lag, n_obs, crit_vals, ic_best = adf_res
 
         is_stationary = p_value < alpha
-        conclusion = "Стационарен (отвергаем H0)" if is_stationary else "Не стационарен (не отвергаем H0)"
+        conclusion = (
+            "Стационарен (отвергаем H0)"
+            if is_stationary
+            else "Не стационарен (не отвергаем H0)"
+        )
 
         # Графическое представление сходимости (стационарности) ценового ряда
         plt.figure(figsize=(10, 3))
@@ -52,7 +58,7 @@ def run_adf_for_price_series(df: pd.DataFrame, run_dir: Path, alpha: float = 0.0
         plt.xlabel("Дата")
         plt.grid(True, alpha=0.3)
         plt.tight_layout()
-        fig_path = run_dir / f"price_series_adf_{col}.png"
+        fig_path = run_dir / f"график_теста_Дики-Фуллера_ценового_ряда_{col}.png"
         plt.savefig(fig_path)
         plt.close()
 
@@ -77,12 +83,10 @@ def run_adf_for_price_series(df: pd.DataFrame, run_dir: Path, alpha: float = 0.0
 
     adf_df = pd.DataFrame(results)
 
-    # Сохраняем подробные результаты теста в CSV
-    adf_csv_path = run_dir / "adf_price_series_results.csv"
+    adf_csv_path = run_dir / "результаты_теста_Дики-Фуллера_по_ценовым_рядам.csv"
     adf_df.to_csv(adf_csv_path, encoding="utf-8-sig", index=False)
 
     # В консоль выводим краткий итог по каждому ряду.
     print("\nРезультаты расширенного теста Дики–Фуллера для ЦЕНОВЫХ рядов:")
     print(adf_df[["Ряд", "ADF статистика", "p-значение", "Вывод"]])
     print(f"\nПолные результаты ADF-теста сохранены в файле: {adf_csv_path.name}")
-
