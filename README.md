@@ -46,7 +46,7 @@
 Из корня проекта выполните:
 
 ```bash
-python -m src.volatility_garch
+python src/run_volatility_analysis.py
 ```
 
 Скрипт:
